@@ -4,17 +4,89 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Foundation | Welcome</title>
+    <link rel="stylesheet" href="main.css" />
     <link rel="stylesheet" href="foundation/css/foundation.css" />
     <link rel="stylesheet" href="foundation/foundation-icons/foundation-icons.css" />
     <script src="foundation/js/modernizr.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular.min.js"></script>
     <script src="main.js" type="text/javascript"></script>
   </head>
-  <body>
+  <body style="padding:10px">
 
   <div ng-cloak ng-app="TabsApp">
       <div class="container" ng-controller="TabManagerCtrl">
-          <span class="label label-info label-ext" ng-click="tabManager.addTab()" style="cursor:pointer">Add a Tab</span><br/><br/>
+
+          <div class="mainpanel">
+              <div style="float:left">
+                  <h3>Главное</h3>
+                  <select ng-options="item.partOfSpeech as item.text | capitalize for item in posData" ng-model="selectedPos" style="float:left;width:200px;margin-right:10px;">
+                      <option style="display:none" value="">Выберите часть речи</option>
+                  </select>
+                  <a ng-click="tabManager.addTab()" style="float:left;" href="#" class="button tiny">Добавить</a>
+              </div>
+
+              <div style="float:left;margin-left:50px;">
+                  <div class="pospanel" ng-repeat="tabInfo in tabManager.tabItems">
+                      <div class="clearfix">
+                          <h5 class="left">{{ tabInfo.title | capitalize }}</h5>
+                          <i class="fi-x medium right"></i>
+                      </div>
+
+                      <div style="float:left;" ng-repeat="property in tabInfo.content">
+                          <div style="margin-left:5px; margin-right:5px;">
+                              <label>{{property.text | capitalize}}</label>
+                              <select multiple data-customforms="disabled" ng-options="val.ident as val.text for val in property.values" ng-model="test">
+                                  <option value="TEST">TEST</option>
+                              </select>
+                          </div>
+                      </div>
+
+                      <p ng-if="tabInfo.content.length == 0">{{tabInfo.title | capitalize}} — и в Африке {{tabInfo.title}}</p>
+                  </div>
+              </div>
+          </div>
+
+          <div class="mainpanel">
+              <div style="float:left">
+                  <h3>Зависимое</h3>
+                  <select style="float:left;width:200px;margin-right:10px;">
+                      <option value="husker">Существительное</option>
+                      <option value="starbuck">Прилагательное</option>
+                      <option value="hotdog">Наречие</option>
+                      <option value="apollo">Глагол</option>
+                  </select>
+                  <a style="float:left;" href="#" class="button tiny">Добавить</a>
+              </div>
+
+              <div style="float:left;margin-left:50px;">
+                  <div class="pospanel">
+                      <h5>Глагол</h5>
+                      <div class="row">
+                          <div class="large-12 columns">
+                              <label>Select Box</label>
+                              <select>
+                                  <option value="husker">Husker</option>
+                                  <option value="starbuck">Starbuck</option>
+                                  <option value="hotdog">Hot Dog</option>
+                                  <option value="apollo">Apollo</option>
+                              </select>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="large-12 columns">
+                              <label>Select Box</label>
+                              <select>
+                                  <option value="husker">Husker</option>
+                                  <option value="starbuck">Starbuck</option>
+                                  <option value="hotdog">Hot Dog</option>
+                                  <option value="apollo">Apollo</option>
+                              </select>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!--<span class="label label-info label-ext" ng-click="tabManager.addTab()" style="cursor:pointer">Add a Tab</span><br/><br/>
 
           <div>
               <dl class="vertical tabs">
@@ -25,15 +97,15 @@
           </div>
 
           <div ng-model="tabManager.tabItems[tabManager.getSelected()]"><h1>{{tabManager.tabItems[tabManager.getSelected()].title}}</h1></div>
-
+          -->
       </div><!-- /container -->
   </div> <!-- /container -->
   </div> <!-- /app -->
 
   <script src="foundation/js/jquery.js"></script>
-    <script src="foundation/js/foundation.min.js"></script>
-    <script>
-      $(document).foundation();
-    </script>
+  <script src="foundation/js/foundation.min.js"></script>
+  <script>
+    $(document).foundation();
+  </script>
   </body>
 </html>
