@@ -759,6 +759,12 @@ angularApp.controller('TabManagerCtrl', ['$scope', function($scope) {
 
   $scope.tabManager.tabItems = [];
 
+  $scope.tabManager.selectItems = [];
+
+  angular.forEach($scope.posData, function(pos) {
+    $scope.tabManager.selectItems.push(pos);
+  });
+
   $scope.tabManager.getTitle = function(tabInfo){
     console.log("[ title ] -> ",tabInfo.title);
     tabInfo.title.substr(0,10);
@@ -766,18 +772,29 @@ angularApp.controller('TabManagerCtrl', ['$scope', function($scope) {
 
   $scope.tabManager.addTab = function(){
     if($scope.selectedPos != undefined) {
-      angular.forEach($scope.posData, function(pos){
-
+      $scope.tabManager.selectItems = [];
+      angular.forEach($scope.posData, function(pos) {
         if(pos.partOfSpeech == $scope.selectedPos) {
           $scope.tabManager.tabItems.push({
             title: pos.text,
             content: pos.properties,
             selected: true
           });
+        } else {
+          $scope.tabManager.selectItems.push(pos);
         }
       });
     }
   };
+
+  $scope.tabManager.removeTab = function(index) {
+    items = []; i = 0;
+    angular.forEach($scope.tabManager.tabItems, function(tab) {
+      if(i != index) items.push(tab);
+      i++;
+    });
+    $scope.tabManager.tabItems = items;
+  }
 }]);
 
 angularApp.filter('limit', function() {
