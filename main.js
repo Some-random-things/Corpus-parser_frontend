@@ -32,7 +32,7 @@ angularApp.controller('TabManagerCtrl', ['$scope', function($scope) {
           "values": [
             {
               "ident": "МУЖ",
-              "text": "мужской"
+              "text": "мужской",
             },
             {
               "ident": "ЖЕН",
@@ -795,6 +795,35 @@ angularApp.controller('TabManagerCtrl', ['$scope', function($scope) {
     });
     $scope.tabManager.tabItems = items;
   }
+
+  $scope.tabManager.getLabelClass = function(tab, index) {
+    changed = false;
+    angular.forEach(tab.content[index].values, function(value) {
+      if(value.selected) changed = true;
+    });
+
+    if(changed) return "alert";
+    else return "";
+  }
+
+  $scope.tabManager.updateSelected = function(property) {
+    angular.forEach(property.values, function(value) {
+      value.selected = false;
+      angular.forEach(property.select, function(sel) {
+        if(sel == value.ident) value.selected = true;
+      })
+    });
+  }
+
+  $scope.tabManager.getLabelString = function(property) {
+    selected = [];
+    angular.forEach(property.values, function(value) {
+      if(value.selected) selected.push(value.ident);
+    })
+
+    if(selected.length == 0) return "";
+    else return "[" + selected.join(",") + "]";
+  }
 }]);
 
 angularApp.filter('limit', function() {
@@ -809,3 +838,7 @@ angularApp.filter('capitalize', function() {
       return input.substring(0,1).toUpperCase()+input.substring(1);
   }
 });
+
+function collapse() {
+  $(".property-settings").addClass("hidden");
+}

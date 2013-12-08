@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="foundation/foundation-icons/foundation-icons.css" />
     <script src="foundation/js/modernizr.js"></script>
     <script src="angular/angular.min.js"></script>
+    <script src="foundation/js/jquery.js"></script>
     <script src="main.js" type="text/javascript"></script>
   </head>
   <body>
@@ -42,46 +43,43 @@
   <div style="float:left;width:520px;padding:10px" ng-cloak ng-app="TabsApp">
       <div class="container" ng-controller="TabManagerCtrl">
 
-          <div class="hide mainpanel-collapsed"><h5>Главное</h5> фыва фыаа </div>
           <div class="mainpanel mainpanel-main">
               <div style="float:left">
-                  <h3>Главное слово</h3>
+                  <h3>Main word</h3>
                   <select ng-options="item.partOfSpeech as item.text | capitalize for item in tabManager.selectItems" ng-model="selectedPos" style="float:left;width:200px;margin-right:10px;">
-                      <option style="display:none" value="">Выберите часть речи</option>
+                      <option style="display:none" value="">Choose part of speech</option>
                   </select>
-                  <a ng-click="tabManager.addTab()" style="float:left;" href="#" class="button tiny">Добавить</a>
+                  <a ng-click="tabManager.addTab()" style="float:left;" href="#" class="button tiny">Add</a>
               </div>
 
               <div style="float:left;margin-left:10px;">
-                  <!--<div class="pospanel" ng-repeat="tabInfo in tabManager.tabItems">
-                      <div class="clearfix">
-                          <h5 class="left">{{ tabInfo.title | capitalize }}</h5>
-                          <a href="#" ng-click="tabManager.removeTab($index)" class="button tiny right"><i class="fi-x medium"></i></a>
-                      </div>
-
-                      <div style="float:left;" ng-repeat="property in tabInfo.content">
-                          <div style="margin-left:5px; margin-right:5px;">
-                              <label>{{property.text | capitalize}}</label>
-                              <select multiple data-customforms="disabled" ng-options="val.ident as val.text for val in property.values" ng-model="test">
-                              </select>
-                          </div>
-                      </div>
-
-                      <p ng-if="tabInfo.content.length == 0">{{tabInfo.title | capitalize}} — и в Африке {{tabInfo.title}}</p>
-                  </div>-->
                   <div class="pospanel" ng-repeat="tabInfo in tabManager.tabItems">
                       <div class="clearfix">
                           <h5 class="left">{{ tabInfo.title | capitalize }}</h5>
-                          <a href="#" ng-click="tabManager.removeTab($index)" class="button tiny right"><i class="fi-x medium"></i></a>
+                          <div class="right">
+                            <a ng-if="tabInfo.content.length != 0" onClick="collapse()" style="margin-right:5px;" ng-click="" href="#"><i class="fi-minus medium"></i></a>
+                            <a ng-click="tabManager.removeTab($index)" href="#"><i class="fi-x medium"></i></a>
+                          </div>
                       </div>
-                      <a ng-repeat="property in tabInfo.content" href="#" style="margin-right:5px;" class="button tiny">{{property.text | capitalize}}</a>
+                      <!--<a ng-repeat="property in tabInfo.content" href="#" style="margin-right:5px;" class="button tiny">{{property.text | capitalize}}</a>-->
+                      <div ng-class="tabManager.getLabelClass(tabInfo, $index)" class="label label-property" ng-repeat="property in tabInfo.content">
+                        <span ng-click="showSettings = ! showSettings" class="label-title">{{property.text | capitalize}}</span> {{tabManager.getLabelString(property)}}
+                        <div class="property-settings" ng-class="{ 'hidden': ! showSettings }">
+                          <select multiple data-customforms="disabled"
+                                  ng-options="val.ident as val.text for val in property.values"
+                                  ng-model="property.select"
+                                  ng-change="tabManager.updateSelected(property)"
+                                  >
+                          </select>
+                        </div>
+                      </div>
                   </div>
               </div>
           </div>
 
           <div class="mainpanel mainpanel-dep">
               <div style="float:left">
-                  <h3>Зависимое слово</h3>
+                  <h3>Dependent word</h3>
                   <select style="float:left;width:200px;margin-right:10px;">
                       <option value="husker">Существительное</option>
                       <option value="starbuck">Прилагательное</option>
@@ -95,20 +93,8 @@
                   
               </div>
           </div>
-          <!--<span class="label label-info label-ext" ng-click="tabManager.addTab()" style="cursor:pointer">Add a Tab</span><br/><br/>
-
-          <div>
-              <dl class="vertical tabs">
-                  <dd ng-repeat="tabInfo in tabManager.tabItems" ng-class="{active: tabInfo.selected}" ng-click="tabManager.select($index)">
-                      <a href="#vertical1">{{ tabInfo.title | limit:15 }}</a>
-                  </dd>
-              </dl>
-          </div>
-
-          <div ng-model="tabManager.tabItems[tabManager.getSelected()]"><h1>{{tabManager.tabItems[tabManager.getSelected()].title}}</h1></div>
-          -->
-      </div><!-- /container -->
-  </div> <!-- /container -->
+      </div>
+  </div>
 
   <div style="float:left;margin-top:10px;">
       <div class="container">
@@ -120,7 +106,6 @@
   </div>
   </div> <!-- /app -->
 
-  <script src="foundation/js/jquery.js"></script>
   <script src="foundation/js/foundation.min.js"></script>
   <script>
     $(document).foundation();

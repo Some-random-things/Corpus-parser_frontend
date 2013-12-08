@@ -42,9 +42,54 @@ body {
     margin-right:10px;
     margin-top:10px;
     float:left;
-    min-width:225px;
+    min-width:224px;
+    z-index:0;
 }
 
 .pospanel h5 {
     margin-right:25px;
+}
+
+.label-property {
+  margin:5px;
+  vertical-align: top !important;
+  z-index:0 !important;
+}
+
+.label-property:hover {
+  cursor:pointer;
+  opacity:0.9;
+}
+
+.label-title {
+  font-size:13px;
+  font-weight:bold;
+  border-bottom: 1px dashed #e6e6e6;
+  z-index:1000;
+}
+
+.property-settings {
+  max-height: 100px;
+  transition: .3s;
+  overflow: hidden;
+  text-align:left !important;
+  z-index:1000 !important
+}
+
+.property-settings p {
+  padding-top:10px;
+  margin-bottom:0px;
+  font-size:10px;
+}
+
+.property-settings select {
+  margin-top:10px;
+}
+
+.settings-checkbox {
+  margin:0 !important;
+}
+
+.property-settings.hidden {
+  max-height: 0;
 }
