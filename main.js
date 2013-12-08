@@ -5,7 +5,20 @@
 
 var angularApp = angular.module('TabsApp', []);
 
-angularApp.controller('TabManagerCtrl', ['$scope', function($scope) {
+angularApp.factory('ajaxService', function($http) {
+  return {
+    getStats: function(data) {
+      //return the promise directly.
+      return $http.get('/api/spring-corpus/test?name=' + data.main[0].partOfSpeech)
+          .then(function(result) {
+            //resolve the promise as the data
+            return result.data;
+          });
+    }
+  }
+});
+
+function TabManagerCtrl($scope, ajaxService) {
 
   $scope.posData = [
     {
@@ -755,6 +768,8 @@ angularApp.controller('TabManagerCtrl', ['$scope', function($scope) {
     }
   ];
 
+  $scope.stats = "befload";
+
   // MAIN
 
   $scope.tabManager = {};
@@ -787,6 +802,8 @@ angularApp.controller('TabManagerCtrl', ['$scope', function($scope) {
           $scope.tabManager.selectItems.push(pos);
         }
       });
+
+      $scope.sendData();
     }
   };
 
@@ -816,6 +833,8 @@ angularApp.controller('TabManagerCtrl', ['$scope', function($scope) {
         if(sel == value.ident) value.selected = true;
       })
     });
+
+    $scope.sendData();
   }
 
   $scope.tabManager.getLabelString = function(property) {
@@ -826,10 +845,6 @@ angularApp.controller('TabManagerCtrl', ['$scope', function($scope) {
 
     if(selected.length == 0) return "";
     else return "[" + selected.join(",") + "]";
-  }
-
-  $scope.tabManager.getProperties = function() {
-    console.log($scope.tabManager.tabItems);
   }
 
   // DEP
@@ -864,6 +879,8 @@ angularApp.controller('TabManagerCtrl', ['$scope', function($scope) {
           $scope.tabManagerDep.selectItems.push(pos);
         }
       });
+
+      $scope.sendData();
     }
   };
 
@@ -893,6 +910,8 @@ angularApp.controller('TabManagerCtrl', ['$scope', function($scope) {
         if(sel == value.ident) value.selected = true;
       })
     });
+
+    $scope.sendData();
   }
 
   $scope.tabManagerDep.getLabelString = function(property) {
@@ -904,7 +923,41 @@ angularApp.controller('TabManagerCtrl', ['$scope', function($scope) {
     if(selected.length == 0) return "";
     else return "[" + selected.join(",") + "]";
   }
-}]);
+
+  $scope.sendData = function() {
+    $scope.dataToSend = {};
+    $scope.dataToSend.main = [];
+    $scope.dataToSend.dep = [];
+
+    angular.forEach($scope.tabManager.tabItems, function(tabInfo) {
+      objToAdd = {};
+      objToAdd.partOfSpeech = tabInfo.partOfSpeech;
+      objToAdd.selected = [];
+
+      angular.forEach(tabInfo.content, function(property) {
+        if(property.select != undefined) objToAdd.selected = objToAdd.selected.concat(property.select);
+      })
+
+      $scope.dataToSend.main.push(objToAdd);
+    });
+
+    angular.forEach($scope.tabManagerDep.tabItems, function(tabInfo) {
+      objToAdd = {};
+      objToAdd.partOfSpeech = tabInfo.partOfSpeech;
+      objToAdd.selected = [];
+
+      angular.forEach(tabInfo.content, function(property) {
+        if(property.select != undefined) objToAdd.selected = objToAdd.selected.concat(property.select);
+      })
+
+      $scope.dataToSend.dep.push(objToAdd);
+    })
+
+    $scope.stats = ajaxService.getStats($scope.dataToSend).then(function(stats) {
+      $scope.stats = stats;
+    });
+  }
+}
 
 angularApp.filter('limit', function() {
   return function (input, value) {

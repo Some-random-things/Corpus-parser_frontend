@@ -120,14 +120,14 @@
             <div class="container">
               <div ng-if="tabManager.tabItems.length != 0 && tabManagerDep.tabItems.length != 0">
                 <h4>Showing results for query
-                  <span ng-repeat="tabInfo in tabManager.tabItems">
+                  <span ng-repeat="tabInfo in tabManager.tabItems" data-tooltip class="has-tip" ng-attr-title="{{tabInfo.title | capitalize}}">
                     <b>{{tabInfo.partOfSpeech}}</b>
                     <span ng-repeat="property in tabInfo.content">
                       {{tabManager.getLabelString(property)}}
                     </span>
                   </span>
                   <span ng-if="tabManager.tabItems.length != 0 && tabManagerDep.tabItems.length != 0"><></span>
-                  <span ng-repeat="tabInfo in tabManagerDep.tabItems">
+                  <span ng-repeat="tabInfo in tabManagerDep.tabItems" data-tooltip class="has-tip" ng-attr-title="{{tabInfo.title | capitalize}}">
                     <b>{{tabInfo.partOfSpeech}}</b>
                     <span ng-repeat="property in tabInfo.content">
                       {{tabManager.getLabelString(property)}}
@@ -140,6 +140,13 @@
               </div>
             </div>
           </div>
+
+        <div class="panel radius">
+          <div class="container">
+            <h3>{{stats}}</h3>
+            <pre>{{dataToSend | json}}</pre>
+          </div>
+        </div>
       </div>
   </div>
   </div> <!-- /app -->
