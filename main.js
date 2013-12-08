@@ -755,6 +755,8 @@ angularApp.controller('TabManagerCtrl', ['$scope', function($scope) {
     }
   ];
 
+  // MAIN
+
   $scope.tabManager = {};
 
   $scope.tabManager.tabItems = [];
@@ -776,6 +778,7 @@ angularApp.controller('TabManagerCtrl', ['$scope', function($scope) {
       angular.forEach($scope.posData, function(pos) {
         if(pos.partOfSpeech == $scope.selectedPos) {
           $scope.tabManager.tabItems.push({
+            partOfSpeech: pos.partOfSpeech,
             title: pos.text,
             content: pos.properties,
             selected: true
@@ -816,6 +819,83 @@ angularApp.controller('TabManagerCtrl', ['$scope', function($scope) {
   }
 
   $scope.tabManager.getLabelString = function(property) {
+    selected = [];
+    angular.forEach(property.values, function(value) {
+      if(value.selected) selected.push(value.ident);
+    })
+
+    if(selected.length == 0) return "";
+    else return "[" + selected.join(",") + "]";
+  }
+
+  $scope.tabManager.getProperties = function() {
+    console.log($scope.tabManager.tabItems);
+  }
+
+  // DEP
+
+  $scope.tabManagerDep = {};
+
+  $scope.tabManagerDep.tabItems = [];
+
+  $scope.tabManagerDep.selectItems = [];
+
+  angular.forEach($scope.posData, function(pos) {
+    $scope.tabManagerDep.selectItems.push(pos);
+  });
+
+  $scope.tabManagerDep.getTitle = function(tabInfo){
+    console.log("[ title ] -> ",tabInfo.title);
+    tabInfo.title.substr(0,10);
+  };
+
+  $scope.tabManagerDep.addTab = function(){
+    if($scope.selectedPosDep != undefined) {
+      $scope.tabManagerDep.selectItems = [];
+      angular.forEach($scope.posData, function(pos) {
+        if(pos.partOfSpeech == $scope.selectedPosDep) {
+          $scope.tabManagerDep.tabItems.push({
+            partOfSpeech: pos.partOfSpeech,
+            title: pos.text,
+            content: pos.properties,
+            selected: true
+          });
+        } else {
+          $scope.tabManagerDep.selectItems.push(pos);
+        }
+      });
+    }
+  };
+
+  $scope.tabManagerDep.removeTab = function(index) {
+    items = []; i = 0;
+    angular.forEach($scope.tabManagerDep.tabItems, function(tab) {
+      if(i != index) items.push(tab);
+      i++;
+    });
+    $scope.tabManagerDep.tabItems = items;
+  }
+
+  $scope.tabManagerDep.getLabelClass = function(tab, index) {
+    changed = false;
+    angular.forEach(tab.content[index].values, function(value) {
+      if(value.selected) changed = true;
+    });
+
+    if(changed) return "alert";
+    else return "";
+  }
+
+  $scope.tabManagerDep.updateSelected = function(property) {
+    angular.forEach(property.values, function(value) {
+      value.selected = false;
+      angular.forEach(property.select, function(sel) {
+        if(sel == value.ident) value.selected = true;
+      })
+    });
+  }
+
+  $scope.tabManagerDep.getLabelString = function(property) {
     selected = [];
     angular.forEach(property.values, function(value) {
       if(value.selected) selected.push(value.ident);

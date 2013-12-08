@@ -93,3 +93,9 @@ body {
 .property-settings.hidden {
   max-height: 0;
 }
+
+.info-panel-right {
+  margin-left:520px;
+  margin-top:10px;
+  margin-right:10px;
+}

@@ -40,8 +40,9 @@
       </section>
   </nav>
 
-  <div style="float:left;width:520px;padding:10px" ng-cloak ng-app="TabsApp">
-      <div class="container" ng-controller="TabManagerCtrl">
+  <div ng-cloak ng-app="TabsApp" ng-controller="TabManagerCtrl">
+  <div style="float:left;width:520px;padding-left:10px;">
+      <div class="container" >
 
           <div class="mainpanel mainpanel-main">
               <div style="float:left">
@@ -78,29 +79,66 @@
           </div>
 
           <div class="mainpanel mainpanel-dep">
-              <div style="float:left">
-                  <h3>Dependent word</h3>
-                  <select style="float:left;width:200px;margin-right:10px;">
-                      <option value="husker">Существительное</option>
-                      <option value="starbuck">Прилагательное</option>
-                      <option value="hotdog">Наречие</option>
-                      <option value="apollo">Глагол</option>
-                  </select>
-                  <a style="float:left;" href="#" class="button tiny">Добавить</a>
-              </div>
+            <div style="float:left">
+              <h3>Dependent word</h3>
+              <select ng-options="item.partOfSpeech as item.text | capitalize for item in tabManagerDep.selectItems" ng-model="selectedPosDep" style="float:left;width:200px;margin-right:10px;">
+                <option style="display:none" value="">Choose part of speech</option>
+              </select>
+              <a ng-click="tabManagerDep.addTab()" style="float:left;" href="#" class="button tiny">Add</a>
+            </div>
 
-              <div style="float:left;margin-left:10px;">
-                  
+            <div style="float:left;margin-left:10px;">
+              <div class="pospanel" ng-repeat="tabInfo in tabManagerDep.tabItems">
+                <div class="clearfix">
+                  <h5 class="left">{{ tabInfo.title | capitalize }}</h5>
+                  <div class="right">
+                    <a ng-if="tabInfo.content.length != 0" onClick="collapse()" style="margin-right:5px;" ng-click="" href="#"><i class="fi-minus medium"></i></a>
+                    <a ng-click="tabManagerDep.removeTab($index)" href="#"><i class="fi-x medium"></i></a>
+                  </div>
+                </div>
+                <!--<a ng-repeat="property in tabInfo.content" href="#" style="margin-right:5px;" class="button tiny">{{property.text | capitalize}}</a>-->
+                <div ng-class="tabManagerDep.getLabelClass(tabInfo, $index)" class="label label-property" ng-repeat="property in tabInfo.content">
+                  <span ng-click="showSettings = ! showSettings" class="label-title">{{property.text | capitalize}}</span> {{tabManagerDep.getLabelString(property)}}
+                  <div class="property-settings" ng-class="{ 'hidden': ! showSettings }">
+                    <select multiple data-customforms="disabled"
+                            ng-options="val.ident as val.text for val in property.values"
+                            ng-model="property.select"
+                            ng-change="tabManagerDep.updateSelected(property)"
+                        >
+                    </select>
+                  </div>
+                </div>
               </div>
+            </div>
           </div>
       </div>
   </div>
 
-  <div style="float:left;margin-top:10px;">
+  <div ng-click="tabManager.getProperties()" class="info-panel-right">
       <div class="container">
           <div class="panel callout radius">
-              <h5>This is a callout panel.</h5>
-              <p>It's a little ostentatious, but useful for important content.</p>
+            <div class="container">
+              <div ng-if="tabManager.tabItems.length != 0 && tabManagerDep.tabItems.length != 0">
+                <h4>Showing results for query
+                  <span ng-repeat="tabInfo in tabManager.tabItems">
+                    <b>{{tabInfo.partOfSpeech}}</b>
+                    <span ng-repeat="property in tabInfo.content">
+                      {{tabManager.getLabelString(property)}}
+                    </span>
+                  </span>
+                  <span ng-if="tabManager.tabItems.length != 0 && tabManagerDep.tabItems.length != 0"><></span>
+                  <span ng-repeat="tabInfo in tabManagerDep.tabItems">
+                    <b>{{tabInfo.partOfSpeech}}</b>
+                    <span ng-repeat="property in tabInfo.content">
+                      {{tabManager.getLabelString(property)}}
+                    </span>
+                  </span>
+                </h4>
+              </div>
+              <div ng-if="tabManager.tabItems.length == 0 || tabManagerDep.tabItems.length == 0">
+                <h4>Please, use panels to the left to form a query.</h4>
+              </div>
+            </div>
           </div>
       </div>
   </div>
