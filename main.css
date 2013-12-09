@@ -103,3 +103,13 @@ body {
 .datapanel {
     margin-top:-10px;
 }
+
+.loading {
+  position:fixed;
+  top:0;
+  left:0;
+  width:500px;
+  height:500px;
+  background-color:#000;
+  z-index:10000000;
+}

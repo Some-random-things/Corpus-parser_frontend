@@ -9,14 +9,33 @@ angularApp.factory('ajaxService', function($http) {
   return {
     getStats: function(data) {
       //return the promise directly.
-      return $http.get('/api/spring-corpus/test?name=' + data.main[0].partOfSpeech)
+      /*return $http.get('/api/spring-corpus/test?name=' + data.main[0].partOfSpeech)
           .then(function(result) {
             //resolve the promise as the data
             return result.data;
-          });
+          });*/
+      return $http.post("/api/spring-corpus/stats/bigram", data).success(function(result){
+        return result;
+      });
     }
   }
 });
+
+angularApp.directive('loading', function () {
+  return {
+    restrict: 'E',
+    replace: true,
+    template: '<div class="loading">LOADING...</div>',
+    link: function (scope, element, attr) {
+      scope.$watch('loading', function (val) {
+        if (val)
+          $(element).show();
+        else
+          $(element).hide();
+      });
+    }
+  }
+})
 
 function TabManagerCtrl($scope, ajaxService) {
 
@@ -1704,8 +1723,10 @@ function TabManagerCtrl($scope, ajaxService) {
       $scope.dataToSend.dep.push(objToAdd);
     })
 
+    $scope.loading = true;
     $scope.stats = ajaxService.getStats($scope.dataToSend).then(function(stats) {
-      $scope.stats = stats;
+      $scope.stats = stats.data;
+      $scope.loading = false;
     });
   }
 }
