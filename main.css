@@ -99,3 +99,7 @@ body {
   margin-top:10px;
   margin-right:10px;
 }
+
+.datapanel {
+    margin-top:-10px;
+}
