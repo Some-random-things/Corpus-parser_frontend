@@ -1695,6 +1695,7 @@ function TabManagerCtrl($scope, ajaxService) {
   }
 
   $scope.sendData = function() {
+    if($scope.tabManager.tabItems.length == 0 || $scope.tabManagerDep.tabItems.length == 0) return;
     $scope.dataToSend = {};
     $scope.dataToSend.main = [];
     $scope.dataToSend.dep = [];
