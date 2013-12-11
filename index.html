@@ -126,7 +126,7 @@
                       {{tabManager.getLabelString(property)}}
                     </span>
                   </span>
-                  <span ng-if="tabManager.tabItems.length != 0 && tabManagerDep.tabItems.length != 0"><></span>
+                  <span ng-if="tabManager.tabItems.length != 0 && tabManagerDep.tabItems.length != 0">></span>
                   <span ng-repeat="tabInfo in tabManagerDep.tabItems">
                     <b data-tooltip class="has-tip" ng-attr-title="{{tabInfo.title | capitalize}}">{{tabInfo.partOfSpeech}}</b>
                     <span ng-repeat="property in tabInfo.content">
@@ -144,7 +144,7 @@
         <div class="panel radius datapanel">
           <div class="container">
             <h3>{{stats}}</h3>
-            <pre>{{posData | json}}</pre>
+            <pre>{{dataToSend | json}}</pre>
           </div>
         </div>
       </div>

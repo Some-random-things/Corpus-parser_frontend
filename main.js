@@ -1697,10 +1697,8 @@ function TabManagerCtrl($scope, ajaxService) {
   $scope.sendData = function() {
     if($scope.tabManager.tabItems.length == 0 || $scope.tabManagerDep.tabItems.length == 0) return;
     $scope.dataToSend = {};
-    $scope.dataToSend.main = [];
-    $scope.dataToSend.dep = [];
 
-    angular.forEach($scope.tabManager.tabItems, function(tabInfo) {
+    /*angular.forEach($scope.tabManager.tabItems, function(tabInfo) {
       objToAdd = {};
       objToAdd.partOfSpeech = tabInfo.partOfSpeech;
       objToAdd.selected = [];
@@ -1722,7 +1720,13 @@ function TabManagerCtrl($scope, ajaxService) {
       })
 
       $scope.dataToSend.dep.push(objToAdd);
-    })
+    })*/
+
+    //$scope.dataToSend.main = $scope.posData;
+    //$scope.dataToSend.dep = $scope.posDataDep;
+
+    $scope.dataToSend.main = $scope.tabManager.tabItems;
+    $scope.dataToSend.dep = $scope.tabManagerDep.tabItems;
 
     $scope.loading = true;
     $scope.stats = ajaxService.getStats($scope.dataToSend).then(function(stats) {
