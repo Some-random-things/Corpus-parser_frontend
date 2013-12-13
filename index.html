@@ -17,12 +17,12 @@
   <nav class="top-bar" data-topbar>
       <ul class="title-area">
           <li class="name">
-              <h1><a href="#">My Site</a></h1>
+              <h1><a href="#">Corpus Stats</a></h1>
           </li>
       </ul>
 
-      <section class="top-bar-section">
-          <!-- Right Nav Section -->
+      <!--<section class="top-bar-section">
+          &lt;!&ndash; Right Nav Section &ndash;&gt;
           <ul class="right">
               <li class="active"><a href="#">Right Nav Button Active</a></li>
               <li class="has-dropdown">
@@ -33,11 +33,11 @@
               </li>
           </ul>
 
-          <!-- Left Nav Section -->
+          &lt;!&ndash; Left Nav Section &ndash;&gt;
           <ul class="left">
               <li><a href="#">Left Nav Button</a></li>
           </ul>
-      </section>
+      </section>-->
   </nav>
 
   <div ng-cloak ng-app="TabsApp" ng-controller="TabManagerCtrl">
@@ -141,18 +141,33 @@
             </div>
           </div>
 
-        <dl class="tabs vertical" data-tab>
+        <dl class="tabs vertical property-panel" data-tab>
           <dd ng-class="{true: 'active'}[$first]" ng-repeat="combination in stats">
-            <a href="#{{combination.count}}"><h5>{{combination.count}}</h5>
-              <b>{{combination.main.partOfSpeech}}</b>
-              >
-              <b>{{combination.dep.partOfSpeech}}</b>
+            <a ng-click="getSentences($index)" href="#{{combination.count}}"><h5>{{combination.count}}</h5>
+              <span class="main-partOfSpeech">{{combination.main.partOfSpeech}}</span> > <b>{{combination.dep.partOfSpeech}}</b><br/>
+              <div ng-if="combination.main.properties.length != 0" class="label properties-label">{{combination.main.properties | join}}</div>
+              <div ng-if="combination.dep.properties.length != 0" class="secondary label properties-label">{{combination.dep.properties | join}}</div>
             </a>
           </dd>
         </dl>
-        <div class="tabs-content vertical">
-          <div ng-class="{true: 'active'}[$first]" ng-repeat="combination in stats" class="content" id="{{combination.count}}">
-            <p>{{combination.main.partOfSpeech}}</p>
+        <div style="width:75%" class="tabs-content vertical sentence-panel">
+          <div ng-class="{true: 'active'}[$first]" ng-repeat="combination in stats" class="sentence-table content" id="{{combination.count}}">
+              <table>
+                  <thead>
+                  <tr>
+                      <th width="50">ID</th>
+                      <th width="200">Bigram</th>
+                      <th>Sentence</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="sentence in sentences">
+                      <td>{{sentence.id}}</td>
+                      <td>{{sentence.bigram}}</td>
+                      <td>{{sentence.sentence}}</td>
+                  </tr>
+                  </tbody>
+              </table>
           </div>
         </div>
 

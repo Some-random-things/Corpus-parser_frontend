@@ -8,13 +8,13 @@ var angularApp = angular.module('TabsApp', []);
 angularApp.factory('ajaxService', function($http) {
   return {
     getStats: function(data) {
-      //return the promise directly.
-      /*return $http.get('/api/spring-corpus/test?name=' + data.main[0].partOfSpeech)
-          .then(function(result) {
-            //resolve the promise as the data
-            return result.data;
-          });*/
       return $http.post("/api/spring-corpus/stats/bigram", data).success(function(result){
+        return result;
+      });
+    },
+
+    getSentences: function(data) {
+      return $http.post("/api/spring-corpus/stats/getsentence", data).success(function(result){
         return result;
       });
     }
@@ -1534,7 +1534,8 @@ function TabManagerCtrl($scope, ajaxService) {
     }
   ];
 
-  $scope.stats = {};
+  $scope.stats = [];
+  $scope.sentences = [];
 
   // MAIN
 
@@ -1708,6 +1709,14 @@ function TabManagerCtrl($scope, ajaxService) {
       $scope.loading = false;
     });
   }
+
+  $scope.getSentences = function(index) {
+    $scope.sentenceLoading = true;
+    $scope.sentences = ajaxService.getSentences($scope.stats[index]).then(function(stats) {
+      $scope.sentences = stats.data;
+      $scope.sentenceLoading = false;
+    })
+  }
 }
 
 angularApp.filter('limit', function() {
@@ -1720,6 +1729,12 @@ angularApp.filter('capitalize', function() {
   return function(input, scope) {
     if (input!=null)
       return input.substring(0,1).toUpperCase()+input.substring(1);
+  }
+});
+
+angularApp.filter('join', function() {
+  return function (input) {
+    return input.join(", ");
   }
 });
 
