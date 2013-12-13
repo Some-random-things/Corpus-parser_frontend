@@ -102,6 +102,7 @@ body {
 
 .datapanel {
     margin-top:-10px;
+    min-height:500px;
 }
 
 .loading {

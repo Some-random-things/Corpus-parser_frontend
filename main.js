@@ -1534,7 +1534,7 @@ function TabManagerCtrl($scope, ajaxService) {
     }
   ];
 
-  $scope.stats = "befload";
+  $scope.stats = {};
 
   // MAIN
 
@@ -1698,35 +1698,9 @@ function TabManagerCtrl($scope, ajaxService) {
     if($scope.tabManager.tabItems.length == 0 || $scope.tabManagerDep.tabItems.length == 0) return;
     $scope.dataToSend = {};
 
-    /*angular.forEach($scope.tabManager.tabItems, function(tabInfo) {
-      objToAdd = {};
-      objToAdd.partOfSpeech = tabInfo.partOfSpeech;
-      objToAdd.selected = [];
-
-      angular.forEach(tabInfo.content, function(property) {
-        if(property.select != undefined) objToAdd.selected = objToAdd.selected.concat(property.select);
-      })
-
-      $scope.dataToSend.main.push(objToAdd);
-    });
-
-    angular.forEach($scope.tabManagerDep.tabItems, function(tabInfo) {
-      objToAdd = {};
-      objToAdd.partOfSpeech = tabInfo.partOfSpeech;
-      objToAdd.selected = [];
-
-      angular.forEach(tabInfo.content, function(property) {
-        if(property.select != undefined) objToAdd.selected = objToAdd.selected.concat(property.select);
-      })
-
-      $scope.dataToSend.dep.push(objToAdd);
-    })*/
-
-    //$scope.dataToSend.main = $scope.posData;
-    //$scope.dataToSend.dep = $scope.posDataDep;
-
     $scope.dataToSend.main = $scope.tabManager.tabItems;
     $scope.dataToSend.dep = $scope.tabManagerDep.tabItems;
+    $scope.dataToSend.rawRequest = false;
 
     $scope.loading = true;
     $scope.stats = ajaxService.getStats($scope.dataToSend).then(function(stats) {
