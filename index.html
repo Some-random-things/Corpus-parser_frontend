@@ -43,7 +43,7 @@
   <div ng-cloak ng-app="TabsApp" ng-controller="TabManagerCtrl">
     <div ng-show="loading" class="centered"><h5><img src="loader-lb.gif" style="width:25px;margin-right:5px;margin-top:-1px;"/> Updating data...</h5></div>
   <div style="float:left;width:520px;padding-left:10px;">
-      <div class="container" >
+      <div class="container" id="controls">
 
           <div class="mainpanel mainpanel-main">
               <div style="float:left">
@@ -142,7 +142,7 @@
             </div>
           </div>
 
-        <dl ng-show="stats.length > 0" class="tabs vertical property-panel" data-tab>
+        <dl id="bigrams" ng-show="stats.length > 0" class="tabs vertical property-panel" data-tab>
           <dd ng-repeat="combination in stats">
             <a ng-click="getSentences($index)" href="#{{combination.count}}"><h5>{{combination.count}}</h5>
               <span class="main-partOfSpeech">{{combination.main.partOfSpeech}}</span> > <b>{{combination.dep.partOfSpeech}}</b><br/>
@@ -151,7 +151,7 @@
             </a>
           </dd>
         </dl>
-        <div style="width:75%" class="tabs-content vertical sentence-panel">
+        <div id="sentence-tab" style="width:75%" class="tabs-content vertical sentence-panel">
           <div ng-class="{true: 'active'}[$first]" ng-repeat="combination in stats" class="sentence-table content" id="{{combination.count}}">
 
               <table>
@@ -224,6 +224,31 @@
   <script src="foundation/js/foundation.min.js"></script>
   <script>
     $(document).foundation();
+
+    var mainPanelPosition = $('#controls').offset();
+    var bigramPanelPosition = $('#bigrams').offset();
+
+    $(window).scroll(function(){
+      if($(window).scrollTop() > mainPanelPosition.top){
+        $('#controls').css('position','fixed').css('top','0');
+        $('#controls').css('margin-top', '10px');
+      } else {
+        $('#controls').css('position','static');
+        $('#controls').css('margin-top', '0px');
+      }
+
+      if($(window).scrollTop() > bigramPanelPosition.top){
+        $('#bigrams').css('position','fixed').css('top','0').addClass('importantWidth');
+        $('#bigrams').css('margin-top', '10px');
+        $('#bigrams').find('> dd').css('float', 'left').css('position', 'static');
+        $('#sentence-tab').width('100%').css('margin-left','-10px');
+      } else {
+        $('#bigrams').css('position','static').removeClass('importantWidth');
+        $('#bigrams').css('margin-top', '-10px');
+        $('#bigrams').find('> dd').css('float', 'none').css('position', 'inherit');
+        $('#sentence-tab').width('75%').css('margin-left','-1px');;
+      }
+    });
   </script>
   </body>
 </html>
