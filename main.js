@@ -1704,15 +1704,17 @@ function TabManagerCtrl($scope, ajaxService) {
     $scope.dataToSend.rawRequest = false;
 
     $scope.loading = true;
-    $scope.stats = ajaxService.getStats($scope.dataToSend).then(function(stats) {
+    ajaxService.getStats($scope.dataToSend).then(function(stats) {
       $scope.stats = stats.data;
       $scope.loading = false;
+      $scope.sentences = [];
     });
   }
 
   $scope.getSentences = function(index) {
     $scope.sentenceLoading = true;
-    $scope.sentences = ajaxService.getSentences($scope.stats[index]).then(function(stats) {
+    $scope.sentences = [];
+    ajaxService.getSentences($scope.stats[index]).then(function(stats) {
       $scope.sentences = stats.data;
       $scope.sentenceLoading = false;
     })

@@ -41,6 +41,7 @@
   </nav>
 
   <div ng-cloak ng-app="TabsApp" ng-controller="TabManagerCtrl">
+    <div ng-show="loading" class="centered"><h5><img src="loader-lb.gif" style="width:25px;margin-right:5px;margin-top:-1px;"/> Updating data...</h5></div>
   <div style="float:left;width:520px;padding-left:10px;">
       <div class="container" >
 
@@ -141,8 +142,8 @@
             </div>
           </div>
 
-        <dl class="tabs vertical property-panel" data-tab>
-          <dd ng-class="{true: 'active'}[$first]" ng-repeat="combination in stats">
+        <dl ng-show="stats.length > 0" class="tabs vertical property-panel" data-tab>
+          <dd ng-repeat="combination in stats">
             <a ng-click="getSentences($index)" href="#{{combination.count}}"><h5>{{combination.count}}</h5>
               <span class="main-partOfSpeech">{{combination.main.partOfSpeech}}</span> > <b>{{combination.dep.partOfSpeech}}</b><br/>
               <div ng-if="combination.main.properties.length != 0" class="label properties-label">{{combination.main.properties | join}}</div>
@@ -152,8 +153,22 @@
         </dl>
         <div style="width:75%" class="tabs-content vertical sentence-panel">
           <div ng-class="{true: 'active'}[$first]" ng-repeat="combination in stats" class="sentence-table content" id="{{combination.count}}">
+
               <table>
                   <thead>
+                  <tr ng-show="sentences.length > 0">
+                    <th colspan="3">
+                      <div ng-switch on="sentences.length">
+                        <h5 ng-switch-when="100">
+                          Showing first <b>100</b> sentences.
+                          <a style="border-bottom:1px dashed grey" href="#">Load more</a>
+                        </h5>
+                        <h5 ng-switch-default>
+                          Showing <b>{{sentences.length}}</b> sentences.
+                        </h5>
+                      </div>
+                    </th>
+                  </tr>
                   <tr>
                       <th width="50">ID</th>
                       <th width="200">Bigram</th>
@@ -161,11 +176,13 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr ng-repeat="sentence in sentences">
-                      <td>{{sentence.id}}</td>
-                      <td>{{sentence.bigram}}</td>
-                      <td>{{sentence.sentence}}</td>
-                  </tr>
+                    <tr ng-show="sentenceLoading"><td colspan="3" style="text-align:center;"><h5><img src="loader.gif" style="width:25px;margin-right:5px;margin-top:-1px;"/> Loading sentences...</h5></td></tr>
+                    <tr ng-show="!sentenceLoading && sentences.length == 0"><td colspan="3" style="text-align:center;"><h5>Select bigram from the list to load sentences.</h5></td></tr>
+                    <tr ng-repeat="sentence in sentences">
+                        <td>{{sentence.id}}</td>
+                        <td>{{sentence.bigram}}</td>
+                        <td>{{sentence.sentence}}</td>
+                    </tr>
                   </tbody>
               </table>
           </div>
