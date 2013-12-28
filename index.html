@@ -120,7 +120,7 @@
           <div class="panel callout radius">
             <div class="container">
               <div ng-if="tabManager.tabItems.length != 0 && tabManagerDep.tabItems.length != 0">
-                <h4>Showing results for query<br/>
+                <h4>Showing results for queries<br/>
                   <span ng-repeat="tabInfo in tabManager.tabItems">
                     <b data-tooltip class="has-tip" ng-attr-title="{{tabInfo.title | capitalize}}">{{tabInfo.partOfSpeech}}</b>
                     <span ng-repeat="property in tabInfo.content">
@@ -129,6 +129,22 @@
                   </span>
                   <span ng-if="tabManager.tabItems.length != 0 && tabManagerDep.tabItems.length != 0">></span>
                   <span ng-repeat="tabInfo in tabManagerDep.tabItems">
+                    <b data-tooltip class="has-tip" ng-attr-title="{{tabInfo.title | capitalize}}">{{tabInfo.partOfSpeech}}</b>
+                    <span ng-repeat="property in tabInfo.content">
+                      {{tabManager.getLabelString(property)}}
+                    </span>
+                  </span>
+
+                   and
+
+                  <span ng-repeat="tabInfo in tabManagerDep.tabItems">
+                    <b data-tooltip class="has-tip" ng-attr-title="{{tabInfo.title | capitalize}}">{{tabInfo.partOfSpeech}}</b>
+                    <span ng-repeat="property in tabInfo.content">
+                      {{tabManager.getLabelString(property)}}
+                    </span>
+                  </span>
+                  <span ng-if="tabManager.tabItems.length != 0 && tabManagerDep.tabItems.length != 0"><</span>
+                  <span ng-repeat="tabInfo in tabManager.tabItems">
                     <b data-tooltip class="has-tip" ng-attr-title="{{tabInfo.title | capitalize}}">{{tabInfo.partOfSpeech}}</b>
                     <span ng-repeat="property in tabInfo.content">
                       {{tabManager.getLabelString(property)}}
@@ -145,7 +161,17 @@
         <dl id="bigrams" ng-show="stats.length > 0" class="tabs vertical property-panel" data-tab>
           <dd ng-repeat="combination in stats">
             <a ng-click="getSentences($index)" href="#{{combination.count}}"><h5>{{combination.count}}</h5>
-              <span class="main-partOfSpeech">{{combination.main.partOfSpeech}}</span> > <b>{{combination.dep.partOfSpeech}}</b><br/>
+              <!--<span class="main-partOfSpeech">{{combination.main.partOfSpeech}}</span>
+              <span ng-show="combination.direction == 0"> > </span>
+              <span ng-show="combination.direction != 0"> < </span>
+                <b>{{combination.dep.partOfSpeech}}</b><br/>-->
+              <div ng-show="combination.direction == 0">
+                <span class="main-partOfSpeech">{{combination.main.partOfSpeech}}</span> > <b>{{combination.dep.partOfSpeech}}</b>
+              </div>
+
+              <div ng-show="combination.direction != 0">
+                <b>{{combination.dep.partOfSpeech}}</b> < <span class="main-partOfSpeech">{{combination.main.partOfSpeech}}</span>
+              </div>
               <div ng-if="combination.main.properties.length != 0" class="label properties-label">{{combination.main.properties | join}}</div>
               <div ng-if="combination.dep.properties.length != 0" class="secondary label properties-label">{{combination.dep.properties | join}}</div>
             </a>
