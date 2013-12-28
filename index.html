@@ -165,11 +165,11 @@
               <span ng-show="combination.direction == 0"> > </span>
               <span ng-show="combination.direction != 0"> < </span>
                 <b>{{combination.dep.partOfSpeech}}</b><br/>-->
-              <div ng-show="combination.direction == 0">
+              <div ng-show="combination.direction != 0">
                 <span class="main-partOfSpeech">{{combination.main.partOfSpeech}}</span> > <b>{{combination.dep.partOfSpeech}}</b>
               </div>
 
-              <div ng-show="combination.direction != 0">
+              <div ng-show="combination.direction == 0">
                 <b>{{combination.dep.partOfSpeech}}</b> < <span class="main-partOfSpeech">{{combination.main.partOfSpeech}}</span>
               </div>
               <div ng-if="combination.main.properties.length != 0" class="label properties-label">{{combination.main.properties | join}}</div>
