@@ -11,6 +11,7 @@
     <script src="angular/angular.min.js"></script>
     <script src="foundation/js/jquery.js"></script>
     <script src="main.js" type="text/javascript"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-sanitize.js" type="text/javascript"></script>
   </head>
   <body>
 
@@ -206,8 +207,15 @@
                     <tr ng-show="!sentenceLoading && sentences.length == 0"><td colspan="3" style="text-align:center;"><h5>Select bigram from the list to load sentences.</h5></td></tr>
                     <tr ng-repeat="sentence in sentences">
                         <td>{{sentence.id}}</td>
-                        <td>{{sentence.bigram}}</td>
-                        <td>{{sentence.sentence}}</td>
+                        <td ng-switch on="sentence.bigram.direction">
+                          <span ng-switch-when="0">
+                            {{sentence.bigram.dep}} < {{sentence.bigram.main}}
+                          </span>
+                          <span ng-switch-default>
+                            {{sentence.bigram.main}} > {{sentence.bigram.dep}}
+                          </span>
+                        </td>
+                        <td ng-bind-html='sentence.sentence | highlight:sentence.bigram'></td>
                     </tr>
                   </tbody>
               </table>

@@ -3,7 +3,7 @@
  */
 /*app.js tabs*/
 
-var angularApp = angular.module('TabsApp', []);
+var angularApp = angular.module('TabsApp', ['ngSanitize']);
 
 angularApp.factory('ajaxService', function($http) {
   return {
@@ -1739,6 +1739,14 @@ angularApp.filter('join', function() {
     return input.join(", ");
   }
 });
+
+angularApp.filter('highlight', function() {
+  return function (input, bigram) {
+    temp = input.replace(bigram.main, "<span class='main-partOfSpeech'>" + bigram.main + "</span>");
+    temp = temp.replace(bigram.dep, "<b>" + bigram.dep + "</b>");
+    return temp;
+  }
+})
 
 function collapse() {
   $(".property-settings").addClass("hidden");
