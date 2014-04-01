@@ -13,6 +13,12 @@ angularApp.factory('ajaxService', function($http) {
       });
     },
 
+    getHashStats: function(hash) {
+      return $http.get("/api/spring-corpus/stats/bigram?hash=" + hash).success(function(result){
+        return result;
+      });
+    },
+
     getSentences: function(data) {
       return $http.post("/api/spring-corpus/stats/getsentence", data).success(function(result){
         return result;
@@ -1705,7 +1711,9 @@ function TabManagerCtrl($scope, ajaxService) {
 
     $scope.loading = true;
     ajaxService.getStats($scope.dataToSend).then(function(stats) {
-      $scope.stats = stats.data;
+      console.log(stats);
+      $scope.stats = stats.data.combinations;
+      window.location.hash = stats.data.hash;
       $scope.loading = false;
       $scope.sentences = [];
     });
@@ -1719,6 +1727,19 @@ function TabManagerCtrl($scope, ajaxService) {
       $scope.sentenceLoading = false;
     })
   }
+
+  angular.element(document).ready(function () {
+    var hash = document.location.hash.replace("#", "");
+    if(hash.length != 0) {
+      ajaxService.getHashStats(hash).then(function(stats) {
+        console.log(stats);
+        $scope.stats = stats.data.combinations;
+        window.location.hash = stats.data.hash;
+        $scope.loading = false;
+        $scope.sentences = [];
+      });
+    }
+  });
 }
 
 angularApp.filter('limit', function() {

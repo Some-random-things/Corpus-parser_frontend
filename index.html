@@ -161,7 +161,7 @@
 
         <dl id="bigrams" ng-show="stats.length > 0" class="tabs vertical property-panel" data-tab>
           <dd ng-repeat="combination in stats">
-            <a ng-click="getSentences($index)" href="#{{combination.count}}"><h5>{{combination.count}}</h5>
+            <a class="bigram-tab-link" ng-click="getSentences($index)" href="#{{combination.count}}"><h5>{{combination.count}}</h5>
               <!--<span class="main-partOfSpeech">{{combination.main.partOfSpeech}}</span>
               <span ng-show="combination.direction == 0"> > </span>
               <span ng-show="combination.direction != 0"> < </span>

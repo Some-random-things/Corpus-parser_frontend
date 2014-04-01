@@ -165,3 +165,7 @@ body {
 }
 
 .importantWidth { width: auto !important; }
+
+.bigram-tab-link {
+  opacity:0.95;
+}
